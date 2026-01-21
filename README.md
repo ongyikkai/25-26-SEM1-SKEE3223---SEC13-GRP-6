@@ -10,13 +10,28 @@ volatile uint8_t countdown1=0, countdown2=0; // Current countdown
 volatile uint8_t running=0;
 
 // Flags set by interrupts
-volatile uint8_t pa0_flag=0;
+volatile uint8_t pa0_flag=0, pa1_flag=0;
 
 // Last button state for edge detection in main loop
-uint8_t last_pa0=1;
+uint8_t last_pa0=1, last_pa1=1;
+
+// ----------------- Subroutine: simple delay -----------------
+void delay_ms(uint32_t ms)
+{
+SysTick->LOAD = 16000-1; // 1ms at 16MHz
+SysTick->VAL = 0;
+SysTick->CTRL = 5;
+for(uint32_t i=0;i<ms;i++)
+    while(!(SysTick->CTRL & (1<<16)));
+SysTick->CTRL = 0;
+}
 
 // ----------------- EXTI Handlers -----------------
 void EXTI0_IRQHandler(void)  // PA0 Start/Pause
 {
     if(EXTI->PR & (1<<0)) { EXTI->PR |= (1<<0); pa0_flag=1; }
+}
+void EXTI1_IRQHandler(void) // PA1 Reset
+{
+    if(EXTI->PR & (1<<1)) { EXTI->PR |= (1<<1); pa1_flag=1; }
 }
