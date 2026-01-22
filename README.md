@@ -35,3 +35,4 @@ void EXTI1_IRQHandler(void) // PA1 Reset
 {
     if(EXTI->PR & (1<<1)) { EXTI->PR |= (1<<1); pa1_flag=1; }
 }
+void EXTI9_5_IRQHandler(void)
