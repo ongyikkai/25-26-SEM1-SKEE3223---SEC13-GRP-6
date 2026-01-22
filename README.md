@@ -9,13 +9,11 @@ volatile uint8_t dice1=0, dice2=0;           // Desired digits
 volatile uint8_t countdown1=0, countdown2=0; // Current countdown
 volatile uint8_t running=0;
 
-// Last button state for edge detection in main loop
-uint8_t last_pa0=1, last_pa1=1, last_pa9=1, last_pa10=1;
 // Flags set by interrupts
-volatile uint8_t pa0_flag=0, pa1_flag=0;
+volatile uint8_t pa0_flag=0, pa1_flag=0, pa9_flag=0, pa10_flag=0;
 
 // Last button state for edge detection in main loop
-uint8_t last_pa0=1, last_pa1=1;
+uint8_t last_pa0=1, last_pa1=1, last_pa9=1, last_pa10=1;
 
 // ----------------- Subroutine: simple delay -----------------
 void delay_ms(uint32_t ms)
