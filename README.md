@@ -77,3 +77,15 @@ intmain(void)
    GPIOC->ODR =(seg_table[countdown2]<<8) | seg_table[countdown1];
    
    uint32_t tick_ms_counter = 0;
+while(1)
+{
+    // ---------- Main loop handles button edge detection ----------
+    uint8_t pa1 = (GPIOA->IDR & (1<<1)) ? 1:0;
+
+    // PA1 Reset
+    if(pa1_flag) {
+        pa1_flag=0;
+        if(last_pa1==1 && pa1==0) { running=0; dice1=dice2=0; countdown1=dice1; countdown2=dice2; delay_ms(20); }
+    }
+
+last_pa1 = pa1;
