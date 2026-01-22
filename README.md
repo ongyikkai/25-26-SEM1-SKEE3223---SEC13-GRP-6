@@ -39,6 +39,11 @@ void EXTI9_5_IRQHandler(void) // PA9 Tens
 {
     if(EXTI->PR & (1<<9)){EXT->PR |=(1<<9); pa9_flag=1;}
 }
+void EXTI15_10_IRQHandler(void) //PA10 Units
+{
+    if(EXTI->PR & (1<<10) {EXTI ->PR |=(1<<10); pa10_flag=1; }
+
+
 // ----------------- Main Function -----------------
 intmain(void)
 {
