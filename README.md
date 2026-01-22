@@ -88,6 +88,8 @@ while(1)
     // ---------- Main loop handles button edge detection ----------
     uint8_t pa0 = (GPIOA->IDR & (1<<0)) ? 1:0;
     uint8_t pa1 = (GPIOA->IDR & (1<<1)) ? 1:0;
+    uint8_t pa9 = (GPIOA->IDR & (1<<9)  ? 1:0;
+    UINT8_t pa10= (GPIOA->IDR & (1<<10) ? 1:0;
 
     // PA0 Start/Pause
     if(pa0_flag) {
@@ -104,7 +106,46 @@ while(1)
        pa9_flag=0;
        if(last_pa9==1&&pa9==0){dice2++; if(dice2>9)dice2=0; if(!running)countdown2=dice2; delay_ms(20);}
        }
-
+    // PA10 Units
+    if (pa10_flag) {
+        pa10_flag=0;
+        if(last_pa10==1 && pa10==0) {dice1++; if(dice1>9) dice1=0; if(!running) countdown1=dice1; delay_ms(20);}
+        }
+        
        last_pa0 = pa0;
        last_pa1 = pa1;
        last_pa9 = pa9;
+       last_pa10 = pa10;
+
+       // ---------- Non-blocking countdown ----------
+       delay_ms(1);
+       tick_ms_counter++;
+       if(running && tick_ms_counter>=1000)
+       { 
+           tick_ms_counter=0;
+           if (countdown1==0 && countdown2==0)
+           {
+                running=0;
+                // Blink 3 times
+                for(uint8_t i=0;i<3;i++)
+                {
+                    GPIOC->ODR = 0x0000;
+                    delay_ms(500);
+                    GPIOC->ODR = (seg_table[countdown2]<<8) | seg_table[countdown1];
+                    delay_ms(500);
+                    }
+                }
+                else
+                {
+                    if(countdown1==0)
+                    {
+                        if(countdown2>0){countdown2--; countdown1=9; }
+                    }
+                    else {countdown1--; }
+                    }
+                }
+
+                // ----------Update 7-segment display ----------
+                GPIOC->ODR = (seg_table[countdown2]<<8) | seg_table[countdown1];
+                }
+}
