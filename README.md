@@ -9,6 +9,8 @@ volatile uint8_t dice1=0, dice2=0;           // Desired digits
 volatile uint8_t countdown1=0, countdown2=0; // Current countdown
 volatile uint8_t running=0;
 
+// Last button state for edge detection in main loop
+uint8_t last_pa0=1, last_pa1=1, last_pa9=1, last_pa10=1;
 // Flags set by interrupts
 volatile uint8_t pa0_flag=0, pa1_flag=0;
 
@@ -87,5 +89,11 @@ while(1)
         pa1_flag=0;
         if(last_pa1==1 && pa1==0) { running=0; dice1=dice2=0; countdown1=dice1; countdown2=dice2; delay_ms(20); }
     }
-
+    // PA9 Tens
+   if(pa9_flag){
+       pa9_flag=0;
+       if(last_pa9==1&&pa9==0){dice2++; if(dice2>9)dice2=0; if(!running)countdown2=dice2;
+delay_ms(20);}
+       }
 last_pa1 = pa1;
+last_pa9 = pa9;
