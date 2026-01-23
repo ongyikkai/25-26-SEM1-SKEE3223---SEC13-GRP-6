@@ -5,7 +5,6 @@
 uint8_t seg_table[10] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
 
 // Countdown variables
-volatile uint8_t dice1=0, dice2=0;           // Desired digits
 volatile uint8_t countdown1=0, countdown2=0; // Current countdown
 volatile uint8_t running=0;
 
@@ -45,7 +44,7 @@ void EXTI15_10_IRQHandler(void) //PA10 Units
 
 
 // ----------------- Main Function -----------------
-intmain(void)
+int main(void)
 {
     // Enable clocks
    RCC->AHB1ENR |= (1<<0)|(1<<2); // GPIOA + GPIOC
@@ -94,22 +93,22 @@ while(1)
     // PA0 Start/Pause
     if(pa0_flag) {
         pa0_flag=0;
-        if(last_pa0==1 && pa0==0) { running=!running; countdown1=dice1; countdown2=dice2; delay_ms(20); }
+        if(last_pa0==1 && pa0==0) { running=!running; delay_ms(20); }
      }
     // PA1 Reset
     if(pa1_flag) {
         pa1_flag=0;
-        if(last_pa1==1 && pa1==0) { running=0; dice1=dice2=0; countdown1=dice1; countdown2=dice2; delay_ms(20); }
+        if(last_pa1==1 && pa1==0) { running=0; countdown1=countdown2=0; delay_ms(20); }
     }
     // PA9 Tens
    if(pa9_flag){
        pa9_flag=0;
-       if(last_pa9==1&&pa9==0){dice2++; if(dice2>9)dice2=0; if(!running)countdown2=dice2; delay_ms(20);}
+       if(!running && last_pa9==1 && pa9==0) { countdown2++; if(countdown2>9) countdown2=0; delay_ms(20); }
        }
     // PA10 Units
     if (pa10_flag) {
         pa10_flag=0;
-        if(last_pa10==1 && pa10==0) {dice1++; if(dice1>9) dice1=0; if(!running) countdown1=dice1; delay_ms(20);}
+        if(!running && last_pa10==1 && pa10==0) { countdown1++; if(countdown1>9) countdown1=0; delay_ms(20); }
         }
         
        last_pa0 = pa0;
