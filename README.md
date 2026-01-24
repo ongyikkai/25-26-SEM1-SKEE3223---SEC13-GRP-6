@@ -50,10 +50,10 @@ int main(void)
    RCC->AHB1ENR |= (1<<0)|(1<<2); // GPIOA + GPIOC
    RCC->APB2ENR |= (1<<14); // SYSCFG
    
-   // Configure PA0, PA1, PA9, PA10 as input pull-up
+   // Configure PA0, PA1, PA9, PA10 as input pull-down
    GPIOA->MODER &= ~((3<<0*2)|(3<<1*2)|(3<<9*2)|(3<<10*2));
    GPIOA->PUPDR &= ~((3<<0*2)|(3<<1*2)|(3<<9*2)|(3<<10*2));
-   GPIOA->PUPDR |= ((1<<0*2)|(1<<1*2)|(1<<9*2)|(1<<10*2));
+   GPIOA->PUPDR |= ((2<<0*2)|(2<<1*2)|(2<<9*2)|(2<<10*2));
    
    // Configure PC0–PC15 as output
    GPIOC->MODER = 0x55555555;
